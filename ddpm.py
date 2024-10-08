@@ -104,7 +104,7 @@ def launch():
     args = parser.parse_args()
 
     args.run_name = "DDPM_Uncondtional"
-    args.epochs = 500
+    args.epochs = 3
     args.batch_size = 12
 
     # args.image_size = 64
