@@ -23,7 +23,7 @@ class pedCls_Dataset(Dataset):
         self.base_dir_list = [self.dict[ds_name] for ds_name in ds_name_list]
         self.txt_name = txt_name
         self.image_transformer = transforms.Compose([
-            transforms.Resize(80),
+            transforms.Resize(64),
             transforms.ToTensor(),
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
         ])
