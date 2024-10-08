@@ -40,7 +40,8 @@ class Diffusion:
         return torch.randint(low=1, high=self.noise_steps, size=(n,))
 
     def sample(self, model, n):
-        logging.info(f"Sampling {n} new images....")
+        # logging.info(f"Sampling {n} new images....")
+        print(f"Sampling {n} new images....")
         model.eval()
         with torch.no_grad():
             x = torch.randn((n, 3, self.img_size, self.img_size)).to(self.device)
@@ -77,7 +78,8 @@ def train(args):
     l = len(dataloader)
 
     for epoch in range(args.epochs):
-        logging.info(f"Starting epoch {epoch}:")
+        # logging.info(f"Starting epoch {epoch}:")
+        print(f"Starting epoch {epoch}:")
         pbar = tqdm(dataloader)
         for i, (images, _) in enumerate(pbar):
             images = images.to(device)
