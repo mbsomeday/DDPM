@@ -51,8 +51,10 @@ class pedCls_Dataset(Dataset):
 
         if self.get_num == -1:
             images = images
+            labels = labels
         else:
             images = images[: self.get_num]
+            labels = labels[: self.get_num]
 
         return images, labels
 
@@ -65,7 +67,7 @@ class pedCls_Dataset(Dataset):
         label = np.array(label).astype(np.int64)
         img = Image.open(image_name)  # PIL image shape:（C, W, H）
         img = self.image_transformer(img)
-        return img
+        return img, label
 
 
 if __name__ == '__main__':
