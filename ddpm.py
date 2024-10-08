@@ -1,3 +1,5 @@
+# https://github.com/dome272/Diffusion-Models-pytorch
+
 import os
 import torch
 import torch.nn as nn
@@ -109,8 +111,8 @@ def launch():
     args.epochs = 3
     args.batch_size = 12
 
-    # args.image_size = 64
-    args.image_size = 224
+    args.image_size = 64
+    # args.image_size = 224
 
     # args.dataset_path = r"C:\Users\dome\datasets\landscape_img_folder"
 
