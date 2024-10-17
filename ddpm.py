@@ -108,11 +108,11 @@ def launch():
     args = parser.parse_args()
 
     args.run_name = "DDPM_Uncondtional"
-    args.epochs = 3
+    args.epochs = 100
     args.batch_size = 8
 
-    args.image_size = 64
-    # args.image_size = 224
+    # args.image_size = 64
+    args.image_size = 224
 
     # args.dataset_path = r"C:\Users\dome\datasets\landscape_img_folder"
 
