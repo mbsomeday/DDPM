@@ -69,7 +69,7 @@ def train(args):
     device = args.device
 
     # dataloader = get_data(args)
-    ped_ds = pedCls_Dataset(dict=DICT, ds_name_list=['D4'], txt_name='augmentation_train.txt', get_num=1000)
+    ped_ds = pedCls_Dataset(dict=DICT, ds_name_list=['D4'], txt_name='augmentation_train.txt', get_num=-1)
     dataloader = DataLoader(ped_ds, batch_size=args.batch_size, shuffle=True, drop_last=True)
 
     model = UNet().to(device)
