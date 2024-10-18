@@ -126,28 +126,35 @@ class Up(nn.Module):
 
 
 class UNet(nn.Module):
-    def __init__(self, c_in=3, c_out=3, time_dim=256, device="cuda"):
+    def __init__(self, c_in=3, c_out=3, time_dim=256, device="cpu"):
         super().__init__()
         self.device = device
         self.time_dim = time_dim
         self.inc = DoubleConv(c_in, 64)
         self.down1 = Down(64, 128)
-        self.sa1 = SelfAttention(128, 32)
+        # self.sa1 = SelfAttention(128, 32)  # img_size=64
+        self.sa1 = SelfAttention(128, 112)   # img_size=224
         self.down2 = Down(128, 256)
-        self.sa2 = SelfAttention(256, 16)
+        # self.sa2 = SelfAttention(256, 16) # img_size=64
+        self.sa2 = SelfAttention(256, 56)   # img_size=224
         self.down3 = Down(256, 256)
-        self.sa3 = SelfAttention(256, 8)
+        # self.sa3 = SelfAttention(256, 8)    # img_size=64
+        self.sa3 = SelfAttention(256, 28)   # img_size=224
+
 
         self.bot1 = DoubleConv(256, 512)
         self.bot2 = DoubleConv(512, 512)
         self.bot3 = DoubleConv(512, 256)
 
         self.up1 = Up(512, 128)
-        self.sa4 = SelfAttention(128, 16)
+        # self.sa4 = SelfAttention(128, 16)    # img_size=64
+        self.sa4 = SelfAttention(128, 56)   # img_size=224
         self.up2 = Up(256, 64)
-        self.sa5 = SelfAttention(64, 32)
+        # self.sa5 = SelfAttention(64, 32)    # img_size=64
+        self.sa5 = SelfAttention(64, 112)    # img_size=224
         self.up3 = Up(128, 64)
-        self.sa6 = SelfAttention(64, 64)
+        # self.sa6 = SelfAttention(64, 64)    # img_size=64
+        self.sa6 = SelfAttention(64, 224)    # img_size=224
         self.outc = nn.Conv2d(64, c_out, kernel_size=1)
 
     def pos_encoding(self, t, channels):
@@ -167,6 +174,7 @@ class UNet(nn.Module):
         x1 = self.inc(x)
         x2 = self.down1(x1, t)
         x2 = self.sa1(x2)
+
         x3 = self.down2(x2, t)
         x3 = self.sa2(x3)
         x4 = self.down3(x3, t)
@@ -184,7 +192,6 @@ class UNet(nn.Module):
         x = self.sa6(x)
         output = self.outc(x)
         return output
-
 
 class UNet_conditional(nn.Module):
     def __init__(self, c_in=3, c_out=3, time_dim=256, num_classes=None, device="cuda"):
@@ -254,10 +261,36 @@ class UNet_conditional(nn.Module):
 
 
 if __name__ == '__main__':
-    # net = UNet(device="cpu")
-    net = UNet_conditional(num_classes=10, device="cpu")
+    net = UNet(device="cpu")
+    # net = UNet_conditional(num_classes=10, device="cpu")
     print(sum([p.numel() for p in net.parameters()]))
-    x = torch.randn(3, 3, 64, 64)
+    x = torch.randn(3, 3, 224, 224)
     t = x.new_tensor([500] * x.shape[0]).long()
     y = x.new_tensor([1] * x.shape[0]).long()
-    print(net(x, t, y).shape)
+    print(net(x, t).shape)
+    # print(net(x, t, y).shape)
+
+    # from torchsummary import summary
+    # model = UNet()
+    # summary(model, (3, 64, 64), 10)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
