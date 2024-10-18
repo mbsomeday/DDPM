@@ -109,7 +109,7 @@ def launch():
 
     args.run_name = "DDPM_Uncondtional"
     args.epochs = 100
-    args.batch_size = 4
+    args.batch_size = 2
 
     # args.image_size = 64
     args.image_size = 112
