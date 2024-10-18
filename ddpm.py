@@ -109,10 +109,10 @@ def launch():
 
     args.run_name = "DDPM_Uncondtional"
     args.epochs = 100
-    args.batch_size = 2
+    args.batch_size = 8
 
-    # args.image_size = 64
-    args.image_size = 128
+    args.image_size = 64
+    # args.image_size = 128
 
     # args.dataset_path = r"C:\Users\dome\datasets\landscape_img_folder"
 

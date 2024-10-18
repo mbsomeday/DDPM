@@ -132,29 +132,22 @@ class UNet(nn.Module):
         self.time_dim = time_dim
         self.inc = DoubleConv(c_in, 64)
         self.down1 = Down(64, 128)
-        # self.sa1 = SelfAttention(128, 32)  # img_size=64
-        self.sa1 = SelfAttention(128, 64)   # img_size=112
+        self.sa1 = SelfAttention(128, 32)  # img_size=64
         self.down2 = Down(128, 256)
-        # self.sa2 = SelfAttention(256, 16) # img_size=64
-        self.sa2 = SelfAttention(256, 32)   # img_size=112
+        self.sa2 = SelfAttention(256, 16) # img_size=64
         self.down3 = Down(256, 256)
-        # self.sa3 = SelfAttention(256, 8)    # img_size=64
-        self.sa3 = SelfAttention(256, 16)   # img_size=112
-
+        self.sa3 = SelfAttention(256, 8)    # img_size=64
 
         self.bot1 = DoubleConv(256, 512)
         self.bot2 = DoubleConv(512, 512)
         self.bot3 = DoubleConv(512, 256)
 
         self.up1 = Up(512, 128)
-        # self.sa4 = SelfAttention(128, 16)    # img_size=64
-        self.sa4 = SelfAttention(128, 32)   # img_size=112
+        self.sa4 = SelfAttention(128, 16)    # img_size=64
         self.up2 = Up(256, 64)
-        # self.sa5 = SelfAttention(64, 32)    # img_size=64
-        self.sa5 = SelfAttention(64, 64)    # img_size=112
+        self.sa5 = SelfAttention(64, 32)    # img_size=64
         self.up3 = Up(128, 64)
-        # self.sa6 = SelfAttention(64, 64)    # img_size=64
-        self.sa6 = SelfAttention(64, 128)    # img_size=112
+        self.sa6 = SelfAttention(64, 64)    # img_size=64
         self.outc = nn.Conv2d(64, c_out, kernel_size=1)
 
     def pos_encoding(self, t, channels):
