@@ -112,7 +112,7 @@ def launch():
     args.batch_size = 1
 
     # args.image_size = 64
-    args.image_size = 224
+    args.image_size = 112
 
     # args.dataset_path = r"C:\Users\dome\datasets\landscape_img_folder"
 
