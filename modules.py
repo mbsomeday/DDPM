@@ -154,7 +154,7 @@ class UNet(nn.Module):
         self.sa5 = SelfAttention(64, 64)    # img_size=112
         self.up3 = Up(128, 64)
         # self.sa6 = SelfAttention(64, 64)    # img_size=64
-        self.sa6 = SelfAttention(64, 112)    # img_size=112
+        self.sa6 = SelfAttention(64, 128)    # img_size=112
         self.outc = nn.Conv2d(64, c_out, kernel_size=1)
 
     def pos_encoding(self, t, channels):
@@ -186,12 +186,14 @@ class UNet(nn.Module):
 
         x = self.up1(x4, x3, t)
         x = self.sa4(x)
+
         x = self.up2(x, x2, t)
         x = self.sa5(x)
         x = self.up3(x, x1, t)
         x = self.sa6(x)
         output = self.outc(x)
         return output
+
 class UNet_conditional(nn.Module):
     def __init__(self, c_in=3, c_out=3, time_dim=256, num_classes=None, device="cuda"):
         super().__init__()
