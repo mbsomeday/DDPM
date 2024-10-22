@@ -69,7 +69,7 @@ def train(args):
     device = args.device
 
     # dataloader = get_data(args)
-    ped_ds = pedCls_Dataset(dict=DICT, ds_name_list=['D4'], txt_name='augmentation_train.txt', get_num=-1)
+    ped_ds = pedCls_Dataset(dict=DICT, ds_name_list=['D4'], txt_name='augmentation_train.txt', img_size=args.image_size, get_num=-1)
     dataloader = DataLoader(ped_ds, batch_size=args.batch_size, shuffle=True, drop_last=True)
 
     model = UNet().to(device)
@@ -111,7 +111,7 @@ def launch():
     args.epochs = 100
     args.batch_size = 8
 
-    args.image_size = 64
+    args.image_size = 224
     # args.image_size = 128
 
     # args.dataset_path = r"C:\Users\dome\datasets\landscape_img_folder"

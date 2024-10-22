@@ -18,12 +18,12 @@ class pedCls_Dataset(Dataset):
         读取多个数据集的数据
     '''
 
-    def __init__(self, dict, ds_name_list, txt_name, get_num):
+    def __init__(self, dict, ds_name_list, txt_name, img_size, get_num):
         self.dict = dict
         self.base_dir_list = [self.dict[ds_name] for ds_name in ds_name_list]
         self.txt_name = txt_name
         self.image_transformer = transforms.Compose([
-            transforms.Resize(64),
+            transforms.Resize(img_size),
             transforms.ToTensor(),
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
         ])
