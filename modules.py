@@ -166,24 +166,24 @@ class UNet(nn.Module):
 
         x1 = self.inc(x)
         x2 = self.down1(x1, t)
-        x2 = self.sa1(x2)
+        # x2 = self.sa1(x2)
 
         x3 = self.down2(x2, t)
-        x3 = self.sa2(x3)
+        # x3 = self.sa2(x3)
         x4 = self.down3(x3, t)
-        x4 = self.sa3(x4)
+        # x4 = self.sa3(x4)
 
         x4 = self.bot1(x4)
         x4 = self.bot2(x4)
         x4 = self.bot3(x4)
 
         x = self.up1(x4, x3, t)
-        x = self.sa4(x)
+        # x = self.sa4(x)
 
         x = self.up2(x, x2, t)
-        x = self.sa5(x)
+        # x = self.sa5(x)
         x = self.up3(x, x1, t)
-        x = self.sa6(x)
+        # x = self.sa6(x)
         output = self.outc(x)
         return output
 
@@ -257,16 +257,13 @@ class UNet_conditional(nn.Module):
 if __name__ == '__main__':
     net = UNet(device="cpu")
     # net = UNet_conditional(num_classes=10, device="cpu")
-    print(sum([p.numel() for p in net.parameters()]))
-    x = torch.randn(3, 3, 224, 224)
+    # print(sum([p.numel() for p in net.parameters()]))
+    x = torch.randn(3, 3, 64, 64)
     t = x.new_tensor([500] * x.shape[0]).long()
     y = x.new_tensor([1] * x.shape[0]).long()
     print(net(x, t).shape)
-    # print(net(x, t, y).shape)
+    # # print(net(x, t, y).shape)
 
-    # from torchsummary import summary
-    # model = UNet()
-    # summary(model, (3, 64, 64), 10)
 
 
 
