@@ -120,7 +120,7 @@ def train(args):
         save_images(sampled_images, os.path.join("results", args.run_name, f"{epoch}.jpg"))
         # torch.save(model.state_dict(), os.path.join("models", args.run_name, f"ckpt.pt"))
 
-        # TODO：模型每个epoch完整保存
+        # 模型每个epoch完整保存
         save_model_name = "ep%03d-MSE%.3f.pth"% (epoch + 1, epoch_loss / len(dataloader))
         save_model_path = os.path.join("models", save_model_name)
         state = {'model': model.state_dict(),
