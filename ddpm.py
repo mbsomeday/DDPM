@@ -69,19 +69,36 @@ def train(args):
     device = args.device
 
     # dataloader = get_data(args)
-    ped_ds = pedCls_Dataset(dict=DICT, ds_name_list=['D4'], txt_name='augmentation_train.txt', img_size=args.image_size, get_num=-1)
+    ped_ds = pedCls_Dataset(dict=DICT, ds_name_list=['D4'], txt_name='augmentation_train.txt', img_size=args.image_size, get_num=20)
     dataloader = DataLoader(ped_ds, batch_size=args.batch_size, shuffle=True, drop_last=True)
 
-    model = UNet().to(device)
-    optimizer = optim.AdamW(model.parameters(), lr=args.lr)
+    # 若是从头训练
+    if not args.reload:
+        model = UNet().to(device)
+        optimizer = optim.AdamW(model.parameters(), lr=args.lr)
+        start_epoch = 0
+
+    # 若是恢复训练
+    else:
+        checkpoint = torch.load(args.model_path, map_location=device)
+        model = UNet().to(device)
+        optimizer = optim.AdamW(model.parameters(), lr=0.1)
+
+        model.load_state_dict(checkpoint["model"])
+        optimizer.load_state_dict(checkpoint["optimizer"])
+        start_epoch = checkpoint['epoch']
+
+
     mse = nn.MSELoss()
     diffusion = Diffusion(img_size=args.image_size, device=device)
     logger = SummaryWriter(os.path.join("runs", args.run_name))
     l = len(dataloader)
 
-    for epoch in range(args.epochs):
+    for epoch in range(start_epoch, args.epochs):
         # logging.info(f"Starting epoch {epoch}:")
         print(f"Starting epoch {epoch}:")
+        epoch_loss = 0
+
         pbar = tqdm(dataloader)
         for i, (images, _) in enumerate(pbar):
             images = images.to(device)
@@ -97,9 +114,21 @@ def train(args):
             pbar.set_postfix(MSE=loss.item())
             logger.add_scalar("MSE", loss.item(), global_step=epoch * l + i)
 
+            epoch_loss += loss.item()
+
         sampled_images = diffusion.sample(model, n=images.shape[0])
         save_images(sampled_images, os.path.join("results", args.run_name, f"{epoch}.jpg"))
-        torch.save(model.state_dict(), os.path.join("models", args.run_name, f"ckpt.pt"))
+        # torch.save(model.state_dict(), os.path.join("models", args.run_name, f"ckpt.pt"))
+
+        # TODO：模型每个epoch完整保存
+        save_model_name = "ep%03d-MSE%.3f.pth"% (epoch + 1, epoch_loss / len(dataloader))
+        save_model_path = os.path.join("models", save_model_name)
+        state = {'model': model.state_dict(),
+                 'optimizer': optimizer.state_dict(),
+                 'eppoch': epoch
+                 }
+        torch.save(state, save_model_path)
+
 
 
 def launch():
@@ -112,6 +141,10 @@ def launch():
     args.batch_size = 8
 
     args.image_size = 224
+
+    args.reload = False
+    args.model_path = None
+
     # args.image_size = 128
 
     # args.dataset_path = r"C:\Users\dome\datasets\landscape_img_folder"
