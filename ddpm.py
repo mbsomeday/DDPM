@@ -69,7 +69,7 @@ def train(args):
     device = args.device
 
     # dataloader = get_data(args)
-    ped_ds = pedCls_Dataset(dict=DICT, ds_name_list=['D4'], txt_name='augmentation_train.txt', img_size=args.image_size, get_num=20)
+    ped_ds = pedCls_Dataset(dict=DICT, ds_name_list=['D4'], txt_name='augmentation_train.txt', img_size=args.image_size, get_num=-1)
     dataloader = DataLoader(ped_ds, batch_size=args.batch_size, shuffle=True, drop_last=True)
 
     # 若是从头训练
@@ -116,13 +116,13 @@ def train(args):
 
             epoch_loss += loss.item()
 
-        # sampled_images = diffusion.sample(model, n=images.shape[0])
-        # save_images(sampled_images, os.path.join("results", args.run_name, f"{epoch}.jpg"))
+        sampled_images = diffusion.sample(model, n=images.shape[0])
+        save_images(sampled_images, os.path.join("results", args.run_name, f"{epoch}.jpg"))
         # torch.save(model.state_dict(), os.path.join("models", args.run_name, f"ckpt.pt"))
 
         # 模型每个epoch完整保存
         save_model_name = "ep%03d-MSE%.3f.pth"% (epoch + 1, epoch_loss / len(dataloader))
-        save_model_path = os.path.join("models", save_model_name)
+        save_model_path = os.path.join("models", args.run_name, save_model_name)
         state = {'model': model.state_dict(),
                  'optimizer': optimizer.state_dict(),
                  'eppoch': epoch
@@ -138,7 +138,7 @@ def launch():
 
     args.run_name = "DDPM_Uncondtional"
     args.epochs = 100
-    args.batch_size = 8
+    args.batch_size = 16
 
     args.image_size = 224
 
