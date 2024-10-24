@@ -116,8 +116,8 @@ def train(args):
 
             epoch_loss += loss.item()
 
-        sampled_images = diffusion.sample(model, n=images.shape[0])
-        save_images(sampled_images, os.path.join("results", args.run_name, f"{epoch}.jpg"))
+        # sampled_images = diffusion.sample(model, n=images.shape[0])
+        # save_images(sampled_images, os.path.join("results", args.run_name, f"{epoch}.jpg"))
         # torch.save(model.state_dict(), os.path.join("models", args.run_name, f"ckpt.pt"))
 
         # 模型每个epoch完整保存
