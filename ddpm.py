@@ -121,7 +121,7 @@ def train(args):
         # torch.save(model.state_dict(), os.path.join("models", args.run_name, f"ckpt.pt"))
 
         # 模型每个epoch完整保存
-        save_model_name = "ep%03d-MSE%.3f.pth"% (epoch + 1, epoch_loss / len(dataloader))
+        save_model_name = "ep%03d-MSE%.6f.pth"% (epoch + 1, epoch_loss / len(dataloader))
         save_model_path = os.path.join("models", args.run_name, save_model_name)
         state = {'model': model.state_dict(),
                  'optimizer': optimizer.state_dict(),
