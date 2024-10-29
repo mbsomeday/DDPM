@@ -80,13 +80,13 @@ def train(args):
 
     # 若是恢复训练
     else:
-        checkpoint = torch.load(args.model_path, map_location=device)
+        checkpoint = torch.load(args.model_path, map_location=device, weights_only=True)
         model = UNet().to(device)
         optimizer = optim.AdamW(model.parameters(), lr=0.1)
 
         model.load_state_dict(checkpoint["model"])
         optimizer.load_state_dict(checkpoint["optimizer"])
-        start_epoch = checkpoint['eppoch']
+        start_epoch = checkpoint['epoch']
 
 
     mse = nn.MSELoss()
