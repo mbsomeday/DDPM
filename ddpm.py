@@ -136,6 +136,8 @@ def launch():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--model_path')
+    parser.add_argument('--reload')
+
 
     args = parser.parse_args()
 
@@ -145,8 +147,6 @@ def launch():
 
     args.image_size = 224
 
-    args.reload = False
-    args.model_path = None
 
     # args.image_size = 128
 
