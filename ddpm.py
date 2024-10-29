@@ -86,7 +86,7 @@ def train(args):
 
         model.load_state_dict(checkpoint["model"])
         optimizer.load_state_dict(checkpoint["optimizer"])
-        start_epoch = checkpoint['epoch']
+        start_epoch = checkpoint['eppoch']
 
 
     mse = nn.MSELoss()
@@ -125,7 +125,7 @@ def train(args):
         save_model_path = os.path.join("models", args.run_name, save_model_name)
         state = {'model': model.state_dict(),
                  'optimizer': optimizer.state_dict(),
-                 'eppoch': epoch
+                 'epoch': epoch
                  }
         torch.save(state, save_model_path)
 
