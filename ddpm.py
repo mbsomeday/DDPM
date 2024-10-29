@@ -134,6 +134,9 @@ def train(args):
 def launch():
     import argparse
     parser = argparse.ArgumentParser()
+
+    parser.add_argument('--model_path')
+
     args = parser.parse_args()
 
     args.run_name = "DDPM_Uncondtional"
@@ -151,6 +154,8 @@ def launch():
 
     args.device = "cuda"
     args.lr = 3e-4
+
+
 
     train(args)
 
